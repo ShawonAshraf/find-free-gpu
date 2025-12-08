@@ -15,22 +15,26 @@ def get_gpu_info() -> List[Dict[str, Any]]:
     try:
         # Use nvidia-smi with JSON output for easy parsing
         result = subprocess.run(
-            ['nvidia-smi', '--query-gpu=index,name,memory.used,memory.total', '--format=csv,noheader,nounits'],
+            [
+                "nvidia-smi",
+                "--query-gpu=index,name,memory.used,memory.total",
+                "--format=csv,noheader,nounits",
+            ],
             capture_output=True,
             text=True,
-            check=True
+            check=True,
         )
 
         gpus = []
-        for line in result.stdout.strip().split('\n'):
+        for line in result.stdout.strip().split("\n"):
             if line.strip():
-                parts = [part.strip() for part in line.split(',')]
+                parts = [part.strip() for part in line.split(",")]
                 if len(parts) >= 4:
                     gpu_info = {
-                        'index': int(parts[0]),
-                        'name': parts[1],
-                        'memory_used_mb': int(parts[2]),
-                        'memory_total_mb': int(parts[3])
+                        "index": int(parts[0]),
+                        "name": parts[1],
+                        "memory_used_mb": int(parts[2]),
+                        "memory_total_mb": int(parts[3]),
                     }
                     gpus.append(gpu_info)
 
@@ -42,18 +46,23 @@ def get_gpu_info() -> List[Dict[str, Any]]:
             print(f"nvidia-smi stderr: {e.stderr}", file=sys.stderr)
         sys.exit(1)
     except FileNotFoundError:
-        print("Error: nvidia-smi not found. Make sure NVIDIA drivers are installed.", file=sys.stderr)
+        print(
+            "Error: nvidia-smi not found. Make sure NVIDIA drivers are installed.",
+            file=sys.stderr,
+        )
         sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}", file=sys.stderr)
         sys.exit(1)
 
 
-def find_free_gpus(gpu_info: List[Dict[str, Any]], threshold_mb: int = 300) -> List[Dict[str, Any]]:
+def find_free_gpus(
+    gpu_info: List[Dict[str, Any]], threshold_mb: int = 300
+) -> List[Dict[str, Any]]:
     """Find GPUs with memory usage below the threshold."""
     free_gpus = []
     for gpu in gpu_info:
-        if gpu['memory_used_mb'] < threshold_mb:
+        if gpu["memory_used_mb"] < threshold_mb:
             free_gpus.append(gpu)
     return free_gpus
 
@@ -70,11 +79,11 @@ def format_output(free_gpus: List[Dict[str, Any]], verbose: bool = False) -> str
                 f"  GPU {gpu['index']}: {gpu['name']} "
                 f"({gpu['memory_used_mb']}MB / {gpu['memory_total_mb']}MB used)"
             )
-        return '\n'.join(output_lines)
+        return "\n".join(output_lines)
     else:
         # Just return the indexes
-        indexes = [str(gpu['index']) for gpu in free_gpus]
-        return ' '.join(indexes)
+        indexes = [str(gpu["index"]) for gpu in free_gpus]
+        return " ".join(indexes)
 
 
 def main():
@@ -87,26 +96,29 @@ Examples:
   %(prog)s -v                 # Verbose output with details
   %(prog)s -t 500             # Use 500MB threshold instead of 300MB
   %(prog)s -q                 # Quiet mode (no output if no free GPUs)
-        """
+        """,
     )
 
     parser.add_argument(
-        '-t', '--threshold',
+        "-t",
+        "--threshold",
         type=int,
         default=300,
-        help='Memory usage threshold in MB to consider GPU as free (default: 300)'
+        help="Memory usage threshold in MB to consider GPU as free (default: 300)",
     )
 
     parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Show detailed information about free GPUs'
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Show detailed information about free GPUs",
     )
 
     parser.add_argument(
-        '-q', '--quiet',
-        action='store_true',
-        help='Do not output anything if no free GPUs are found'
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="Do not output anything if no free GPUs are found",
     )
 
     args = parser.parse_args()
