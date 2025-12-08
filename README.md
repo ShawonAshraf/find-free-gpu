@@ -1,11 +1,12 @@
 # find-free-gpu
 
-An `nvidia-smi` query parser which finds the free GPUs for you in a multi-user GPU server.
+A CLI tool that queries `nvidia-smi` to find unused GPUs by checking memory usage. GPUs with memory usage below 300MB are considered free.
 
-## Running locally
+## Usage
 
 ```bash
-cd find-free-gpu
-uv sync
-source .venv/bin/activate
+python main.py          # Print indexes of free GPUs
+python main.py -v       # Verbose output with details
+python main.py -t 500   # Use 500MB threshold
+python main.py -q       # Quiet mode
 ```
