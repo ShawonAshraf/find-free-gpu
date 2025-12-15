@@ -13,3 +13,8 @@ wheels/
 .claude/
 .vscode/
 .idea/
+
+# test coverage
+coverage.xml
+.coverage
+.pytest_cache/
