@@ -1,5 +1,10 @@
 # find-free-gpu
 
+| Tests | Coverage |
+|--------|----------|
+| [![Tests](https://github.com/ShawonAshraf/find-free-gpu/actions/workflows/test.yml/badge.svg)](https://github.com/ShawonAshraf/find-free-gpu/actions/workflows/test.yml) | [![codecov](https://codecov.io/gh/ShawonAshraf/find-free-gpu/graph/badge.svg?token=dvkfy4iEdd)](https://codecov.io/gh/ShawonAshraf/find-free-gpu) |
+
+
 A CLI tool that queries `nvidia-smi` to find unused GPUs by checking memory usage. GPUs with memory usage below 300MB are considered free.
 
 ## Usage
