@@ -15,3 +15,16 @@ python main.py -v       # Verbose output with details
 python main.py -t 500   # Use 500MB threshold
 python main.py -q       # Quiet mode
 ```
+
+## Dev
+
+```bash
+# install uv from https://docs.astral.sh/uv/getting-started/installation/
+uv sync
+uv run main.py
+
+# for testing with coverage
+uv run pytest tests/ -v --cov --cov-report=xml
+# without coverage
+uv run pytest
+```
